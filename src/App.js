@@ -28,10 +28,17 @@ export default class App extends Component {
     let qrDados = { ...this.state.qrDados }
     if (dado.name === 'somenteLink') {
       let somenteLink = this.state.somenteLink
+      if(somenteLink){
+        this.setState({qrDados:null})
+      }
       this.setState({ somenteLink:!somenteLink })
     }
     else {
-      qrDados[dado.name] = dado.value;
+      if(this.state.somenteLink){
+        qrDados = dado.value;
+      }else{
+        qrDados[dado.name] = dado.value;
+      }
     }
     this.setState({ qrDados })
   }
@@ -42,8 +49,8 @@ export default class App extends Component {
       <div>
         {this.state.qrDados ? <QR img={this.state.img} dados={this.state.qrDados} /> : null}
         {this.state.somenteLink ? null : <input onChange={(e) => { this.updadeState(e) }} name="nomeEmpresa" placeholder="Nome empresa" />}
-        <input onChange={(e) => { this.updadeState(e) }} name="link" placeholder="Link QR" />
-        {this.state.qrDados ? <><p>Logo img</p><ImageUpload updateImg={this.updateImg.bind(this)} /></> : null}
+        <input  onChange={(e) => { this.updadeState(e) }} name="link" placeholder="Link QR" />
+        {this.state.qrDados ? <><p>Logo img</p><ImageUpload updateImg={this.updateImg.bind(this)} /><button onClick={()=> {this.setState({img:''})}}>Limpar img</button></> : null}
         <div>
           <p>Somente link</p>
           <input checked={this.state.somenteLink} type="checkbox" name="somenteLink" onChange={(e) => { this.updadeState(e) }} />
